@@ -9,7 +9,7 @@ steps:
   displayName: Get Secrets from Key Vault
   inputs:
     azureSubscription: 'spn-keyvault-devops'
-    KeyVaultName: 'keyvault019'
+    KeyVaultName: 'myownkeyvault019'
     SecretsFilter: '*' # 'DatabasePassword'
     RunAsPreJob: false
 
