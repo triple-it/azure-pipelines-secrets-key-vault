@@ -11,7 +11,7 @@ The following script will create a Key Vault and Secret:
 ```bash
 # create the variables
 KEYVAULT_RG="rg-keyvault-devops"
-KEYVAULT_NAME="keyvault019"
+KEYVAULT_NAME="myownkeyvault019"
 SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 
 # create new resource group
@@ -25,7 +25,7 @@ az keyvault create --name $KEYVAULT_NAME \
 
 ```bash
 # assign RBAC role to the current user to manage secrets
-USER_ID=$(az ad signed-in-user show --query objectId -o tsv)
+USER_ID=$(az ad signed-in-user show --query id -o tsv)
 
 KEYVAULT_ID=$(az keyvault show --name $KEYVAULT_NAME \
    --resource-group $KEYVAULT_RG \
@@ -54,7 +54,7 @@ echo $SPN | jq .
 
 SPN_APPID=$(echo $SPN | jq .appId)
 
-SPN_ID=$(az ad sp list --display-name "spn-keyvault-devops" --query [0].objectId --out tsv)
+SPN_ID=$(az ad sp list --display-name "spn-keyvault-devops" --query [0].id --out tsv)
 <!-- SPN_ID=$(az ad sp show --id $SPN_APPID --query objectId --out tsv) -->
 
 # assign RBAC role to the service principal
@@ -85,7 +85,7 @@ steps:
   displayName: Get Secrets from Key Vault
   inputs:
     azureSubscription: 'spn-keyvault-devops'
-    KeyVaultName: 'keyvault019'
+    KeyVaultName: 'myownkeyvault019'
     SecretsFilter: '*' # 'DatabasePassword'
     RunAsPreJob: false
 
