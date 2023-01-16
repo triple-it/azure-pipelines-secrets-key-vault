@@ -10,12 +10,12 @@ The following script will create a Key Vault and Secret:
 
 ```bash
 # create the variables
-KEYVAULT_RG="rg-keyvault-devops"
+KEYVAULT_RG="rg-myownkeyvault-devops"
 KEYVAULT_NAME="myownkeyvault019"
 SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 
 # create new resource group
-az group create -n rg-keyvault-devops -l westeurope
+az group create -n rg-mykeyvault-devops -l westeurope
 
 # create key vault with RBAC option (not Access Policy)
 az keyvault create --name $KEYVAULT_NAME \
@@ -48,13 +48,13 @@ az keyvault secret set --name "DatabasePassword" \
 
 ```bash
 # create a service principal
-SPN=$(az ad sp create-for-rbac -n "spn-keyvault-devops")
+SPN=$(az ad sp create-for-rbac -n "spn-myownkeyvault-devops")
 
 echo $SPN | jq .
 
 SPN_APPID=$(echo $SPN | jq .appId)
 
-SPN_ID=$(az ad sp list --display-name "spn-keyvault-devops" --query [0].id --out tsv)
+SPN_ID=$(az ad sp list --display-name "spn-myownkeyvault-devops" --query [0].id --out tsv)
 <!-- SPN_ID=$(az ad sp show --id $SPN_APPID --query objectId --out tsv) -->
 
 # assign RBAC role to the service principal
@@ -84,7 +84,7 @@ steps:
 - task: AzureKeyVault@2
   displayName: Get Secrets from Key Vault
   inputs:
-    azureSubscription: 'spn-keyvault-devops'
+    azureSubscription: 'spn-myownkeyvault-devops'
     KeyVaultName: 'myownkeyvault019'
     SecretsFilter: '*' # 'DatabasePassword'
     RunAsPreJob: false
